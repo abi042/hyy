@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security Verification</title>
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    background:#050505;
+    color:#00ff00;
+    font-family: monospace;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+}
+.box{
+    width:95%;
+    max-width:430px;
+    border:2px solid #00ff00;
+    padding:25px;
+    border-radius:12px;
+}
+.hidden{display:none;}
+.red{
+    color:#ff0000;
+    border-color:#ff0000;
+}
+.big{
+    font-size:24px;
+    font-weight:bold;
+}
+.blink{
+    animation:blink 0.6s infinite;
+}
+@keyframes blink{
+    0%,100%{opacity:1;}
+    50%{opacity:0;}
+}
+.shake{
+    animation:shake 0.3s infinite;
+}
+@keyframes shake{
+    0%{transform:translateX(0);}
+    25%{transform:translateX(-6px);}
+    50%{transform:translateX(6px);}
+    75%{transform:translateX(-6px);}
+    100%{transform:translateX(0);}
+}
+.highlight{
+    background:red;
+    color:black;
+    padding:4px 6px;
+    font-weight:bold;
+}
+button{
+    margin-top:15px;
+    padding:12px 22px;
+    font-size:16px;
+    background:#00ff00;
+    border:none;
+    cursor:pointer;
+    font-weight:bold;
+}
+.click-any{
+    margin-top:15px;
+    color:#ff0000;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<!-- PAGE 1 -->
+<div id="page1" class="box red shake">
+    <p class="big blink">⚠️ WARNING</p>
+    <p>Suspicious activity detected on your device</p>
+    <p><b>Immediate verification required</b></p>
+    <button onclick="start()">VERIFY NOW</button>
+</div>
+
+<!-- SCAN -->
+<div id="scan" class="box hidden">
+    <p>Connecting to security server...</p>
+    <p id="scanText">Reading device information</p>
+    <p id="percent">0%</p>
+</div>
+
+<!-- DATA LEAK -->
+<div id="leak" class="box hidden red shake">
+    <p class="big blink">❌ BREACH CONFIRMED</p>
+    <p class="highlight">USER DATA LEAKED</p>
+    <p>Device: Android</p>
+    <p>Facebook ID: ACTIVE SESSION</p>
+    <p class="blink highlight">SENDING DATA TO REMOTE SERVER...</p>
+</div>
+
+<!-- UPLOAD -->
+<div id="upload" class="box hidden red">
+    <p class="big">⬆ DATA TRANSFER IN PROGRESS</p>
+    <p class="highlight">Messages • Photos • Contacts</p>
+    <p id="uploadPercent">Uploading: 1%</p>
+</div>
+
+<!-- CLICK ANYWHERE -->
+<div id="finalWarn" class="box hidden red">
+    <p class="big blink">UPLOAD COMPLETE</p>
+    <p class="highlight">ALL DATA STORED ON SERVER</p>
+    <p class="click-any">👉 CLICK ANYWHERE TO CONTINUE</p>
+</div>
+
+<!-- REALITY -->
+<div id="reality" class="box hidden">
+    <p class="big">😂😂 RELAX BRO</p>
+    <p>No data sent.</p>
+    <p>No Facebook accessed.</p>
+    <p>This was just <b>HTML + JavaScript</b> 😎</p>
+    <p style="margin-top:15px;">Now forward this link 😈</p>
+</div>
+
+<script>
+let percent = 0;
+function start(){
+    page1.classList.add("hidden");
+    scan.classList.remove("hidden");
+
+    let texts = [
+        "Reading device information",
+        "Accessing installed apps",
+        "Fetching Facebook session",
+        "Analyzing user data"
+    ];
+    let i=0;
+
+    let interval = setInterval(()=>{
+        percent += Math.floor(Math.random()*7)+5;
+        scanText.innerText = texts[i%texts.length];
+        percent>=100 ? percent=100 : percent;
+        document.getElementById("percent").innerText = percent + "%";
+        i++;
+
+        if(percent>=100){
+            clearInterval(interval);
+            setTimeout(showLeak,800);
+        }
+    },300);
+}
+
+function showLeak(){
+    scan.classList.add("hidden");
+    leak.classList.remove("hidden");
+
+    setTimeout(()=>{
+        leak.classList.add("hidden");
+        upload.classList.remove("hidden");
+        startUpload();
+    },3500);
+}
+
+function startUpload(){
+    let up = 1;
+    let upInt = setInterval(()=>{
+        up += Math.floor(Math.random()*8)+3;
+        if(up>=100){
+            up=100;
+            clearInterval(upInt);
+            setTimeout(()=>{
+                upload.classList.add("hidden");
+                finalWarn.classList.remove("hidden");
+                document.body.onclick = showReality;
+            },800);
+        }
+        uploadPercent.innerText = "Uploading: " + up + "%";
+    },350);
+}
+
+function showReality(){
+    finalWarn.classList.add("hidden");
+    reality.classList.remove("hidden");
+    document.body.style.background="#0f0f0f";
+    document.body.style.color="#fff";
+    document.body.onclick = null;
+}
+</script>
+
+</body>
+</html>
